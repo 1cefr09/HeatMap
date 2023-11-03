@@ -1,28 +1,25 @@
 import numpy as np
+from scipy import interpolate
+
+# 定义原始数据点的坐标和z值
+x = [0,50,100]
+y = [0,50,100]
+z = [[0.28,1.91,0.48],[1.14,5.49,1.44],[0.16,1.64,0.23]]
+
+# 创建二维插值函数
+interp_func = interpolate.interp2d(x, y, z, kind='cubic')
+
+# 定义新的插值点坐标
+new_x = np.linspace(0, 100, 1000)
+new_y = np.linspace(0, 100, 1000)
+
+# 使用插值函数计算新的插值点的z值
+new_z = interp_func(new_x, new_y)
+
+# 绘制结果
 import matplotlib.pyplot as plt
-from scipy.interpolate import interp2d
-
-
-if __name__ == '__main__':
-    # x = np.array(([[0, 10, 20, 30, 40, 50, 60, 70, 80]]))
-    # x_r = np.repeat(x, [8], axis=0)
-    # print(x_r.shape)
-    # print(x_r)
-    #
-    # y = np.array(([[80, 70, 60, 50, 40, 30, 20, 10]])).T
-    # y_r = np.repeat(y, [9], axis=1)
-    # print(y_r.shape)
-    # print(y_r)
-
-    x=np.arange(0, 1000,1)
-
-    y=np.arange(0, 1000,1)
-    z=np.zeros((1000,1000))
-    z[500,500]=1
-
-    c = plt.pcolormesh(x, y, z, cmap='viridis', shading='gouraud')# 彩虹热力图
-
-    plt.colorbar(c, label='AUPR')
-    plt.xlabel('x')
-    plt.ylabel('y')
-    plt.show()
+plt.imshow(new_z, cmap='jet', extent=[0, 100, 0, 100], origin='lower')
+plt.colorbar()
+plt.xlabel('X')
+plt.ylabel('Y')
+plt.show()
